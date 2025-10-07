@@ -6,6 +6,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth import get_user_model
 from .models import ChatRoom, Message
 from rest_framework_simplejwt.tokens import AccessToken
+from asgiref.sync import sync_to_async
 
 User = get_user_model()
 
@@ -55,6 +56,7 @@ def create_message(chatroom, user, content):
         'chat_id':chatroom.id
     }
     
+    
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -81,6 +83,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'messages': messages
         }))
         
+    
+        
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.room_group_name,self.channel_name)
         
@@ -88,11 +92,22 @@ class ChatConsumer(AsyncWebsocketConsumer):
         data = json.loads(text_data)
         message = data['message']
         
+        
+        other_user = await sync_to_async(lambda: self.chatroom.members.exclude(id=self.user.id).get())()
+        receiverUser = other_user.id
         new_message_data = await create_message(self.chatroom, self.user, message)
         await self.channel_layer.group_send(self.room_group_name,{
             "type": "chat_message",
             "message": new_message_data
         })
+        trigger_payload = {
+           'type':'trigger_message',
+           'text':'You have a new message',
+           'chat_id':new_message_data['chat_id'],
+           'timeSorter':new_message_data['timestamp']
+        }
+        await self.channel_layer.group_send(f"user_{receiverUser}",trigger_payload)
+        await self.channel_layer.group_send(f"user_{self.user.id}",trigger_payload)
         
     async def chat_message(self, event):
         message = event["message"]
@@ -128,6 +143,18 @@ class ChatroomConsumer(AsyncWebsocketConsumer):
             "type":"new_chatroom",
             "chatroom": event["chatroom"]
         }))
+        
+    async def trigger_message(self,event):
+        await self.send(text_data=json.dumps({
+            'triggered_data':event['text'],
+            'status':'Message received via trigger',
+            'type':'trigger_message',
+            'chat_id':event['chat_id'],
+            'timeSorter':event['timeSorter']
+        }))
+        
+    # Code to listen a new message from the chatroom consumer
+    
         
 
 # class UserChatroomConsumer(AsyncWebsocketConsumer):
