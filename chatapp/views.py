@@ -13,6 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 import jwt
 from django.conf import settings
+from django.core.mail import send_mail
 
 
 # Create your views here.
@@ -149,5 +150,17 @@ def change_password(request):
         else:
             return JsonResponse({'error':'Wrong password'}, status=400)  
     return JsonResponse({'error':'An error occured make sure you are logged in'}, status=400)
+
+# view for sending email
+@api_view(["POST"])
+def recover_credentials(request):
+    try:
+        send_mail('Test subject','This is the body of the test email','r2420428@students.uz.ac.zw',['phiriecknycem@gmail.com'],False)
+        return JsonResponse({
+            "message":"Email sent successfully"
+        })
+    except Exception as e:
+        print(e)
+        return JsonResponse({"error":"Email not sent"},status=400)
         
         

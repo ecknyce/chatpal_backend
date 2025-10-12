@@ -1,0 +1,16 @@
+username : addy
+password : @Addy1234
+email: addy@gmail.com
+
+username : papie
+password : @Papie1234
+email: papie@gmail.com
+
+
+2025Chatapp@ecky
+
+
+
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
+eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU4ODEzMzU1LCJpYXQiOjE3NTg4MTE1NTUsImp0aSI6ImFkNDhhZmRmYTY4YzRjNjlhOWVhYWI2MjY0MzBjZWRhIiwidXNlcl9pZCI6Mn0.
+kzJy-ne66Y8u9Shf1y3BHNpcYk9AUunZM-ujCo1lh_4"
