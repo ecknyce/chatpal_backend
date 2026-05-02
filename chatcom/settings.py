@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from datetime import timedelta
 from pathlib import Path
 import os
-
+import dj_database_url
 from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -28,7 +28,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["ecknyce.pythonanywhere.com", "localhost", ]
+ALLOWED_HOSTS = ["ecknyce.pythonanywhere.com", "localhost","127.0.0.1" ]
 
 
 # Application definition
@@ -143,14 +143,15 @@ DATABASES = {
     }
 }
 
+
 # EMAIL SETTINGS
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config('EMAIL_HOSTER')
-EMAIL_HOST_PASSWORD = 'dtrxfhanxqhnbptk'
-DEFAULT_FROM_EMAIL = config('dtrxfhanxqhnbptk')
+EMAIL_HOST_PASSWORD = config('APP_PASSWORD')
+DEFAULT_FROM_EMAIL = config('APP_PASSWORD')
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

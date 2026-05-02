@@ -1,3 +1,4 @@
 .env
 .venv
 .project.txt
+db.sqlite3

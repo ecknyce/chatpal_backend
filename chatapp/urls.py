@@ -13,4 +13,5 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/recover/email',recover_credentials, name="recover_credentials"),
+    path('api/test/',test_deployment, name="test_deployment"),
 ]

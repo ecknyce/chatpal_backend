@@ -164,3 +164,7 @@ def recover_credentials(request):
         return JsonResponse({"error":"Email not sent"},status=400)
         
         
+
+@api_view(["GET"])
+def test_deployment(request):
+    return JsonResponse({"message":"Deployment successful"}, status=200)
