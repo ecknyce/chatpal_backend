@@ -39,7 +39,10 @@ def checkAuth(request):
 
 def getLastMessage(chatroom):
     latest_message = Message.objects.filter(chatroom=chatroom).order_by('-timestamp').first()
-    return latest_message.timestamp
+    if latest_message:
+        return latest_message.timestamp
+    return chatroom.created_at
+        
 
 
 class RegistrationView(APIView):
