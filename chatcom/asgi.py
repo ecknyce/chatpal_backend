@@ -20,16 +20,28 @@ django_asgi_app = get_asgi_application()
 # 3. NOW import your Channels-specific modules
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
-from channels.security.websocket import AllowedHostsOriginValidator
+from channels.security.websocket import AllowedHostsOriginValidator, OriginValidator
 from chatapp import routing
 
-application = ProtocolTypeRouter({
-    # Use the pre-initialized django_asgi_app here
-    "http": django_asgi_app,
+# application = ProtocolTypeRouter({
+#     # Use the pre-initialized django_asgi_app here
+#     "http": django_asgi_app,
     
-    "websocket": AllowedHostsOriginValidator(
+#     "websocket": AllowedHostsOriginValidator(
+#         AuthMiddlewareStack(
+#             URLRouter(routing.websocket_urlpatterns)
+#         ), 
+#         ["https://chatapp-front-eight.vercel.app"]
+#     )
+# })
+
+
+application = ProtocolTypeRouter({
+    "http": django_asgi_app,
+    "websocket": OriginValidator(
         AuthMiddlewareStack(
             URLRouter(routing.websocket_urlpatterns)
-        ), 
-    )
+        ),
+        ["https://chatapp-front-eight.vercel.app"]
+    ),
 })

@@ -28,7 +28,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 RENDER_EXTERNAL_HOST_NAME = os.environ.get('RENDER_EXTERNAL_HOST_NAME')
-ALLOWED_HOSTS = [ "localhost", "127.0.0.1", '0.0.0.0']
+ALLOWED_HOSTS = [ "localhost", "127.0.0.1", '0.0.0.0', "chatapp-front-eight.vercel.app"]
 if RENDER_EXTERNAL_HOST_NAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOST_NAME)
 
