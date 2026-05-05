@@ -7,6 +7,7 @@ from django.contrib.auth import get_user_model
 from .models import ChatRoom, Message
 from rest_framework_simplejwt.tokens import AccessToken
 from asgiref.sync import sync_to_async
+from urllib.parse import parse_qs
 
 User = get_user_model()
 
@@ -60,7 +61,13 @@ def create_message(chatroom, user, content):
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        token = self.scope['query_string'].decode('utf-8').split('=')[1]
+        query_string = self.scope['query_string'].decode('utf-8')
+        query_params = parse_qs(query_string)
+        token = query_params.get('token', [None])[0]
+        
+        if not token:
+            await self.close()
+            return
         self.user = await get_user_from_token_key(token)
         if not self.user.is_authenticated:
             await self.close()
@@ -119,8 +126,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
         
 class ChatroomConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        token = self.scope['query_string'].decode('utf-8').split("=")[1]
+        query_string = self.scope['query_string'].decode('utf-8')
+        query_params = parse_qs(query_string)
+        token = query_params.get('token', [None])[0]
         
+        if not token:
+            await self.close()
+            return
         self.user = await get_user_from_token_key(token)
         if not self.user.is_authenticated:
             await self.close()

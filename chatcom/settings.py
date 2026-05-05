@@ -27,8 +27,19 @@ SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+RENDER_EXTERNAL_HOST_NAME = os.environ.get('RENDER_EXTERNAL_HOST_NAME')
+ALLOWED_HOSTS = [ "localhost", "127.0.0.1", '0.0.0.0']
+if RENDER_EXTERNAL_HOST_NAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOST_NAME)
 
-ALLOWED_HOSTS = [f"{os.environ.get('RENDER_EXTERNAL_HOST_NAME')}", "localhost", "127.0.0.1", '0.0.0.0']
+
+
+CSRF_TRUSTED_ORIGINS =[
+    config('FRONTEND_URL'),
+    config('FRONTEND_PRODUCTION_URL'),
+    "https://chatpal-web.onrender.com",
+]
+    
 
 
 # Application definition
