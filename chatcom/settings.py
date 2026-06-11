@@ -162,7 +162,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': config('SUPABASE_PASSWORD'),
         'HOST': config('SUPABASE_HOST'),
-        'PORT': '5432',
+        'PORT': '6543',
     }
 }
 
