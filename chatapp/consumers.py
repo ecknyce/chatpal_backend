@@ -41,7 +41,8 @@ def get_messages(chatroom):
             'sender': message.sender.username,
             'sender_id': message.sender.id,
             'content': message.content,
-            'timestamp': str(message.timestamp)
+            'timestamp': str(message.timestamp),
+            'message_id':message.id
         }
         for message in messages
     ]
@@ -54,7 +55,8 @@ def create_message(chatroom, user, content):
         'sender_id': user.id,
         'content': content,
         'timestamp': str(message.timestamp),
-        'chat_id':chatroom.id
+        'chat_id':chatroom.id,
+        'message_id':message.id
     }
     
     

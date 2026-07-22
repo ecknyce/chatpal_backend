@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 from django.db import IntegrityError
 from django.http import JsonResponse
 from .models import ChatRoom, Message
@@ -170,4 +170,27 @@ def recover_credentials(request):
 
 @api_view(["GET"])
 def test_deployment(request):
-    return JsonResponse({"message":"Deployment successful"}, status=200)
+    return JsonResponse({"message":"Backend Runnig!!!"}, status=200)
+
+@csrf_exempt
+@permission_classes([IsAuthenticated])
+@api_view(["POST"])
+def delete_message(request):
+    try:
+        if request.method == "POST":
+            data = json.loads(request.body)
+            user = checkAuth(request)
+            if user:
+            
+                sender_id = data.get("sender_id")
+                if str(user.id) == str(sender_id):
+                    message_id = data.get("message_id")
+                    message = get_object_or_404(Message, id=message_id)
+                    message.delete()
+                    return JsonResponse({"message": "Message deleted successfully"}, status=200)
+            else:
+                print("User is not the sender of the message",user.id,sender_id)
+        return JsonResponse({"error": "Failed to delete message"}, status=400)
+    except Exception as e:
+        print("Error deleting message:", e)
+        return JsonResponse({"error": "An error occurred while deleting the message"}, status=500)
